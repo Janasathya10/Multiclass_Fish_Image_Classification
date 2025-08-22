@@ -1,36 +1,37 @@
-# 🐟 Multiclass_Fish_Image_Classification Project
+# Multiclass_Fish_Image_Classification Project
 
 This project aims to classify fish species using Convolutional Neural Networks (CNNs) and Transfer Learning techniques. It includes training and evaluation scripts, as well as a Streamlit web application for prediction.
 
 ---
 
 ## 📁 Project Structure
-
 ```
 fish-classification/
-├── app.py                # Streamlit web app for model inference
-├── cnn_model.py          # Custom CNN architecture
-├── data_loader.py        # Data generators for train/val/test sets
-├── evaluate.py           # Evaluate all models and save metrics
-├── train_model.py        # Train the custom CNN model
-├── transfer_model.py     # Train multiple transfer learning models
-├── models/               # Trained .h5 models and plots
-├── data/                 # Folder structure with train/val/test images
-│   ├── train/
-│   ├── val/
-│   └── test/
-└── requirements.txt      # Dependencies
+├── app.py             # Streamlit web app for model inference
+├── cnn_model.py       # Custom CNN architecture
+├── data_loader.py     # Data generators for train/val/test sets
+├── evaluate.py        # Evaluate all models and save metrics
+├── train_model.py     # Orchestrates training (CNN + Transfer Models)
+├── transfer_model.py  # Pretrained backbones & transfer model builder
+├── models/            # Trained .h5 models + metadata JSONs
+├── results/           # Evaluation results (reports, confusion matrices)
+├── data/              # Dataset (train/val/test folders with classes)
+│ ├── train/
+│ ├── val/
+│ └── test/
+└── requirements.txt   # Dependencies
 ```
 
 ---
 
 ## 📦 Features
 
-- ✅ Custom CNN training
-- ✅ Transfer learning with **VGG16, ResNet50, InceptionV3, MobileNet, EfficientNetB0**
-- ✅ Model evaluation with accuracy, F1 score, confusion matrix
-- ✅ Streamlit UI for fish image classification
-- ✅ Leaderboard CSV for model comparison
+✅ Custom CNN training  
+✅ Transfer learning with **VGG16, ResNet50, InceptionV3, MobileNet, EfficientNetB0**  
+✅ Metadata saving for consistent preprocessing and label mapping  
+✅ Model evaluation with **accuracy, F1 score, confusion matrix, classification report**  
+✅ Streamlit UI for real-time fish image classification  
+✅ Leaderboard CSV for model comparison  
 
 ---
 
@@ -74,7 +75,9 @@ data/
     └── ...
 ```
 
-Each class should contain images (JPG/PNG) of that fish type.
+- Each subfolder = one fish species.
+- Images can be .jpg, .png, etc.
+- Train set → model learning, Val set → hyperparameter tuning, Test set → final evaluation.
 
 ---
 
@@ -84,17 +87,9 @@ Each class should contain images (JPG/PNG) of that fish type.
 
 ```bash
 python train_model.py
+
+or you can train each model alone by using (python train_model.py --only CNN)
 ```
-
-### 2. Train Transfer Learning Models
-
-```bash
-python transfer_model.py
-```
-
-This will save models under the `models/` directory.
-
----
 
 ## 📊 Evaluate Models
 
@@ -104,7 +99,9 @@ To compare all trained models and generate confusion matrices:
 python evaluate.py
 ```
 
-This creates a `leaderboard.csv` and confusion matrix plots inside the `models/` folder.
+- results/leaderboard.csv → model comparison (accuracy, precision, recall, F1)
+- Per-model classification_report.csv
+- Per-model confusion_matrix.csv
 
 ---
 
@@ -120,20 +117,24 @@ Then open the link (usually http://localhost:8501) in your browser.
 
 ## 📉 Output Samples
 
-- `models/leaderboard.csv`: Accuracy and F1 score comparison
-- `models/*.png`: Confusion matrices & accuracy plots
+- results/leaderboard.csv → Accuracy & F1-score comparison of all models.
+- results/*classification_report.csv → per-model metrics.
+- results/*confusion_matrix.csv → confusion matrix for each model.
 
+models/*.h5 + *_metadata.json → saved models with metadata.
 ---
 
 ## 🧠 Models Used
 
-- ✅ Custom CNN (`cnn_model.py`)
-- ✅ Pretrained Models:
-  - VGG16
-  - ResNet50
-  - InceptionV3
-  - MobileNet
-  - EfficientNetB0
+✅ Custom CNN (from cnn_model.py)
+
+✅ Transfer Learning (from transfer_model.py):
+
+- VGG16
+- ResNet50
+- InceptionV3
+- MobileNet
+- EfficientNetB0
 
 ---
 
@@ -150,5 +151,6 @@ scikit-learn==1.2.2
 opencv-python==4.8.0.76
 streamlit==1.33.0
 seaborn==0.12.2
+pillow==9.5.0
 ```
 ------------------------------------------------------------------------------------------------
